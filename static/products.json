@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 10,
+      "artist": "Green Day",
+      "title": "American Idiot",
+      "price": 40,
+      "availableInventory": 5,
+      "rating": 5,
+      "image": "american-idiot.jpg"
+    },
+    {
+      "id": 11,
+      "artist": "Kiss",
+      "title": "Destroyer",
+      "price": 50,
+      "availableInventory": 3,
+      "rating": 4,
+      "image": "destroyer.jpg"
+    },
+    {
+      "id": 12,
+      "artist": "Queen",
+      "title": "II",
+      "price": 80,
+      "availableInventory": 2,
+      "rating": 3,
+      "image": "logo.png"
+    }
+  ]
+}

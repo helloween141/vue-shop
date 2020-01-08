@@ -1,0 +1,95 @@
+<template>
+<div class="row">
+  <div class="col-lg-4 col-md-6 mb-4" v-for="product in products">
+    <div class="card h-100">
+      <a href="#">
+        <img class="card-img-top" :src="getImage(product.image)" alt="">
+      </a>
+      <div class="card-body">
+        <h4 class="card-title">
+          <a href="#">
+            {{product.artist}}. {{ product.title }}
+          </a>
+        </h4>
+        <h5>${{ product.price | priceFormatterFilter }}</h5>
+        <div class="card-text">
+          In stock: {{ product.availableInventory }}
+        </div>
+        <small class="text-muted" v-for="rate in product.rating">
+          ★
+        </small>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" @click="addToCart(product)"
+                                        :disabled="canAddToCart(product)">
+          Add to cart
+        </button>
+      </div>
+    </div>
+  </div>
+  Cart: {{ cart }}, {{ cartitemCount }}
+</div>
+</template>
+
+<script>
+import { mixin } from './mixins/mixin.js'
+import capitalizeFilter from './filters/capitalize.js'
+import priceFormatterFilter from './filters/price-formatter.js'
+import { eventBus } from '../main'
+
+const axios = require('axios')
+
+export default {
+  name: 'ProductsList',
+  mixins: [mixin],
+  filters: {
+    capitalizeFilter,
+    priceFormatterFilter
+  },
+  data() {
+    return {
+      products: [],
+      cart: []
+    }
+  },
+  created: function() {
+    axios.get('/static/products.json').then(response => {
+      this.products = response.data.products;
+    });
+  },
+  computed: {
+    cartitemCount() {
+       return this.cart.length || 0;
+    }
+  },
+  methods: {
+    addToCart(product) {
+      this.cart.push(product.id);
+
+      eventBus.$emit('set-cart-count', {
+        cartitemCount: this.cartitemCount
+      });
+    },
+
+    canAddToCart(product) {
+       return this.cartProductCount(product.id) > product.availableInventory;
+    },
+
+    cartProductCount(productId) {
+      let count = 0;
+      for (let i = 0; i < this.cart.length; i++) {
+        if (productId == this.cart[i]) {
+          count++;
+        }
+      }
+      return count;
+    }
+
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
