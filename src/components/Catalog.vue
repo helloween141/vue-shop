@@ -1,6 +1,10 @@
 <template>
   <div class="container">
     <div class="row">
+      <div class="col-lg-12 text-left">
+          <h1 class="mt-4">Catalog</h1>
+          <hr />
+      </div>  
       <div class="col-lg-3">
         <Filters />
       </div>

@@ -2,18 +2,22 @@
 <div class="row">
   <div class="col-lg-4 col-md-6 mb-4" v-for="product in products">
     <div class="card h-100">
-      <a href="#">
-        <img class="card-img-top" :src="getImage(product.image)" alt="">
-      </a>
+      <div class="card-img">
+        <a href="#">
+          <img class="card-img-top" :src="getImage(product.image)" />
+        </a>
+      </div>
       <div class="card-body">
         <h4 class="card-title">
           <a href="#">
-            {{product.artist}}. {{ product.title }}
+            {{product.artist}}.<br /> {{ product.title }}
           </a>
         </h4>
         <h5>${{ product.price | priceFormatterFilter }}</h5>
         <div class="card-text">
-          In stock: {{ product.availableInventory }}
+          <small class="text-muted">
+            Available: {{ product.availableInventory }} pc.
+          </small>
         </div>
         <small class="text-muted" v-for="rate in product.rating">
           ★
@@ -78,7 +82,7 @@ export default {
     cartProductCount(productId) {
       let count = 0;
       for (let i = 0; i < this.cart.length; i++) {
-        if (productId == this.cart[i]) {
+        if (productId === this.cart[i]) {
           count++;
         }
       }
@@ -91,5 +95,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .card-img {
+    height: 240px;
+  }
 </style>
