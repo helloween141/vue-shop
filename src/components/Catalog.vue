@@ -4,34 +4,40 @@
       <div class="col-lg-12 text-left">
           <h1 class="mt-4">Catalog</h1>
           <hr />
-      </div>  
+      </div>
       <div class="col-lg-3">
-        <Filters />
+        <LeftMenu @setCategory="setCategory" />
       </div>
       <div class="col-lg-9">
-        <ProductsList />
+        <ProductsList
+          :parameters="parameters"
+        />
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Filters from './Filters';
-import ProductsList from './ProductsList';
+import LeftMenu from './LeftMenu'
+import ProductsList from './ProductsList'
 
 export default {
-  name: 'Catalog',
-  components: {
-    Filters,
-    ProductsList
-  },
   data () {
     return {
+      parameters: {}
     }
   },
- methods: function() {
-
- }
+  name: 'Catalog',
+  components: {
+    LeftMenu,
+    ProductsList
+  },
+  methods: {
+    setCategory (categoryId) {
+      this.parameters = { 'currentCategoryId': categoryId }
+    }
+  }
 }
 </script>
 

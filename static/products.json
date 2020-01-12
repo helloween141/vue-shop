@@ -2,6 +2,7 @@
   "products": [
     {
       "id": 10,
+      "categoryId": 1,
       "artist": "Green Day",
       "title": "American Idiot",
       "price": 40,
@@ -11,6 +12,7 @@
     },
     {
       "id": 11,
+      "categoryId": 1,
       "artist": "Kiss",
       "title": "Destroyer",
       "price": 50,
@@ -20,6 +22,7 @@
     },
     {
       "id": 12,
+      "categoryId": 1,
       "artist": "Queen",
       "title": "II",
       "price": 80,

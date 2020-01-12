@@ -18,7 +18,7 @@ export default {
   },
   mounted() {
     eventBus.$on('set-cart-count', (data) => {
-      this.cartitemCount = data.cartitemCount;
+      this.cartitemCount = data.cartitemCount
     });
   }
 }

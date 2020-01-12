@@ -14,9 +14,9 @@ export default {
     return {
     }
   },
- methods: function() {
+  methods: function() {
 
- }
+  }
 }
 </script>
 

@@ -36,10 +36,11 @@
 </template>
 
 <script>
+import { eventBus } from '../main'
 import { mixin } from './mixins/mixin.js'
 import capitalizeFilter from './filters/capitalize.js'
 import priceFormatterFilter from './filters/price-formatter.js'
-import { eventBus } from '../main'
+
 
 const axios = require('axios')
 
@@ -50,45 +51,71 @@ export default {
     capitalizeFilter,
     priceFormatterFilter
   },
-  data() {
+  props: {
+    parameters: Object
+  },
+  data () {
     return {
       products: [],
       cart: []
     }
   },
-  created: function() {
-    axios.get('/static/products.json').then(response => {
-      this.products = response.data.products;
-    });
+  created: function () {
+    this.loadGoods()
   },
   computed: {
-    cartitemCount() {
-       return this.cart.length || 0;
-    }
+    cartitemCount () {
+      return this.cart.length || 0
+    },
   },
   methods: {
-    addToCart(product) {
-      this.cart.push(product.id);
 
-      eventBus.$emit('set-cart-count', {
-        cartitemCount: this.cartitemCount
+    loadGoods () {
+      axios.get('/static/products.json')
+      .then(response => {
+        this.products = response.data.products
+        this.refreshProducts();
+      }).catch(error => {
+        console.log(error)
       });
     },
 
-    canAddToCart(product) {
-       return this.cartProductCount(product.id) > product.availableInventory;
+    addToCart (product) {
+      this.cart.push(product.id)
+
+      eventBus.$emit('set-cart-count', {
+        cartitemCount: this.cartitemCount
+      })
     },
 
-    cartProductCount(productId) {
-      let count = 0;
+    canAddToCart (product) {
+      return this.cartProductCount(product.id) > product.availableInventory
+    },
+
+    cartProductCount (productId) {
+      let count = 0
       for (let i = 0; i < this.cart.length; i++) {
         if (productId === this.cart[i]) {
-          count++;
+          count++
         }
       }
-      return count;
-    }
+      return count
+    },
 
+    refreshProducts () {
+      if (this.parameters.currentCategoryId > 0) {
+        let self = this
+        this.products = this.products.filter(function (product) {
+          return product.categoryId === self.parameters.currentCategoryId
+        })
+      }
+    }
+    
+  },
+  watch: {
+    parameters: function () {
+      this.loadGoods()
+    }
   }
 }
 </script>

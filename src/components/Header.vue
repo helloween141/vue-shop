@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import CartWidget from './cart/CartWidget';
+import CartWidget from './cart/CartWidget'
 
 export default {
   name: 'Header',
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     setActive() {
-      alert(1);
+      alert(1)
     }
   }
 }
