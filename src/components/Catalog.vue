@@ -6,13 +6,12 @@
           <hr />
       </div>
       <div class="col-lg-3">
-        <LeftMenu @setCategory="setCategory" />
+        <LeftMenu @setCategoryFilter="setCategoryFilter" />
       </div>
       <div class="col-lg-9">
         <ProductsList
           :parameters="parameters"
         />
-
       </div>
     </div>
   </div>
@@ -28,15 +27,19 @@ export default {
       parameters: {}
     }
   },
+
   name: 'Catalog',
+
   components: {
     LeftMenu,
     ProductsList
   },
+
   methods: {
-    setCategory (categoryId) {
-      this.parameters = { 'currentCategoryId': categoryId }
+    setCategoryFilter (categoryId) {
+      this.parameters = {...this.parameters, ...{category: categoryId}};
     }
+    
   }
 }
 </script>

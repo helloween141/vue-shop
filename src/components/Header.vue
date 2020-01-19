@@ -15,7 +15,7 @@
           </ul>
 
           <CartWidget />
-
+         
         </div>
       </div>
     </nav>

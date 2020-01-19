@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-  <div class="col-lg-4 col-md-6 mb-4" v-for="product in products">
+  <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts">
     <div class="card h-100">
       <div class="card-img">
         <a href="#">
@@ -25,18 +25,19 @@
       </div>
       <div class="card-footer">
         <button class="btn btn-primary" @click="addToCart(product)"
-                                        :disabled="canAddToCart(product)">
-          Add to cart
+                :disabled="!canAddToCart(product)">
+          Add to cart {{ parameters }}
         </button>
       </div>
     </div>
   </div>
-  Cart: {{ cart }}, {{ cartitemCount }}
+
 </div>
 </template>
 
 <script>
-import { eventBus } from '../main'
+import {mapGetters, mapMutations} from 'vuex'
+
 import { mixin } from './mixins/mixin.js'
 import capitalizeFilter from './filters/capitalize.js'
 import priceFormatterFilter from './filters/price-formatter.js'
@@ -46,60 +47,37 @@ const axios = require('axios')
 
 export default {
   name: 'ProductsList',
+
   mixins: [mixin],
+
   filters: {
     capitalizeFilter,
     priceFormatterFilter
   },
+
   props: {
     parameters: Object
   },
-  data () {
-    return {
-      products: [],
-      cart: []
-    }
+
+
+  mounted: function () {
+    this.$store.dispatch('loadProducts')
   },
-  created: function () {
-    this.loadGoods()
-  },
-  computed: {
-    cartitemCount () {
-      return this.cart.length || 0
-    },
-  },
+
+  computed: mapGetters(
+    ['allProducts', 'filterProducts', 'cartCount', 'cartProductAmount']
+  ),
+
   methods: {
 
-    loadGoods () {
-      axios.get('/static/products.json')
-      .then(response => {
-        this.products = response.data.products
-        this.refreshProducts();
-      }).catch(error => {
-        console.log(error)
-      });
+    ...mapMutations(['addProduct']),
+
+    canAddToCart (product) {
+      return this.cartProductAmount(product.id) < product.availableInventory
     },
 
     addToCart (product) {
-      this.cart.push(product.id)
-
-      eventBus.$emit('set-cart-count', {
-        cartitemCount: this.cartitemCount
-      })
-    },
-
-    canAddToCart (product) {
-      return this.cartProductCount(product.id) > product.availableInventory
-    },
-
-    cartProductCount (productId) {
-      let count = 0
-      for (let i = 0; i < this.cart.length; i++) {
-        if (productId === this.cart[i]) {
-          count++
-        }
-      }
-      return count
+      this.addProduct(product)
     },
 
     refreshProducts () {
@@ -110,19 +88,17 @@ export default {
         })
       }
     }
-    
+
   },
+
   watch: {
-    parameters: function () {
-      this.loadGoods()
+    parameters() {
+      this.filterProducts(this.parameters)
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .card-img {
-    height: 240px;
-  }
+
 </style>
