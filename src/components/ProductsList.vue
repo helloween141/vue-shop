@@ -1,36 +1,40 @@
 <template>
-<div class="row">
-  <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts">
-    <div class="card h-100">
-      <div class="card-img">
-        <a href="#">
-          <img class="card-img-top" :src="getImage(product.image)" />
-        </a>
-      </div>
-      <div class="card-body">
-        <h4 class="card-title">
+  <div class="row" v-if="allProducts.length">
+    <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts" :key="product.id">
+      <div class="card h-100">
+        <div class="card-img">
           <a href="#">
-            {{product.artist}}.<br /> {{ product.title }}
+            <img class="card-img-top" :src="getImage(product.image)" />
           </a>
-        </h4>
-        <h5>${{ product.price | priceFormatterFilter }}</h5>
-        <div class="card-text">
-          <small class="text-muted">
-            Available: {{ product.availableInventory }} pc.
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="#">
+              {{product.artist}}.<br /> {{ product.title }}
+            </a>
+          </h4>
+          <h5>${{ product.price | priceFormatterFilter }}</h5>
+          <div class="card-text">
+            <small class="text-muted">
+              Available: {{ product.availableInventory }} pc.
+            </small>
+          </div>
+          <small class="text-muted" v-for="rate in product.rating">
+            ★
           </small>
         </div>
-        <small class="text-muted" v-for="rate in product.rating">
-          ★
-        </small>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-primary" @click="addToCart(product)"
-                :disabled="!canAddToCart(product)">
-          Add to cart {{ parameters }}
-        </button>
+        <div class="card-footer">
+          <button class="btn btn-primary" @click="addToCart(product)"
+                  :disabled="!canAddToCart(product)">
+            Add to cart
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </div>  
+  <div class="row" v-else>
+    <p> Sorry, products not found! </p>
+  </div>  
 
 </div>
 </template>
@@ -64,13 +68,17 @@ export default {
     this.$store.dispatch('loadProducts')
   },
 
-  computed: mapGetters(
-    ['allProducts', 'filterProducts', 'cartCount', 'cartProductAmount']
-  ),
+  computed: { 
+    ...mapGetters(['cartCount', 'cartProductAmount']),
+
+    allProducts() {
+      return this.$store.getters.allProducts(this.parameters)
+    }
+  },
 
   methods: {
 
-    ...mapMutations(['addProduct']),
+    ...mapMutations(['addProduct', 'refreshProducts']),
 
     canAddToCart (product) {
       return this.cartProductAmount(product.id) < product.availableInventory
@@ -80,21 +88,6 @@ export default {
       this.addProduct(product)
     },
 
-    refreshProducts () {
-      if (this.parameters.currentCategoryId > 0) {
-        let self = this
-        this.products = this.products.filter(function (product) {
-          return product.categoryId === self.parameters.currentCategoryId
-        })
-      }
-    }
-
-  },
-
-  watch: {
-    parameters() {
-      this.filterProducts(this.parameters)
-    }
   }
 }
 </script>
