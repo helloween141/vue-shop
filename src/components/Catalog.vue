@@ -6,12 +6,10 @@
           <hr />
       </div>
       <div class="col-lg-3">
-        <LeftMenu @setCategoryFilter="setCategoryFilter" />
+        <LeftMenu />
       </div>
       <div class="col-lg-9">
-        <ProductsList
-          :parameters="parameters"
-        />
+        <ProductsList />
       </div>
     </div>
   </div>
@@ -22,25 +20,13 @@ import LeftMenu from './LeftMenu'
 import ProductsList from './ProductsList'
 
 export default {
-  data () {
-    return {
-      parameters: {}
-    }
-  },
-
   name: 'Catalog',
 
   components: {
     LeftMenu,
     ProductsList
-  },
-
-  methods: {
-    setCategoryFilter (categoryId) {
-      this.parameters = {...this.parameters, ...{category: categoryId}};
-    }
-    
   }
+
 }
 </script>
 

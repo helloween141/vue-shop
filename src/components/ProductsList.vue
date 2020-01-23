@@ -69,11 +69,7 @@ export default {
   },
 
   computed: { 
-    ...mapGetters(['cartCount', 'cartProductAmount']),
-
-    allProducts() {
-      return this.$store.getters.allProducts(this.parameters)
-    }
+    ...mapGetters(['allProducts', 'cartCount', 'cartProductAmount'])
   },
 
   methods: {

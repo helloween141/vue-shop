@@ -2,17 +2,17 @@ const axios = require('axios')
 
 export default {
 	state: {
-		products: []
+		products: [],
+		filters: []
 	},
 
 	getters: {
 		allProducts (state) {
-			return function (filters = []) {
-				if (filters['category']) {
-					return state.products.filter(
-						product => product.categoryId === filters['category']
-					)			
-				}
+			if (state.filters.category) {
+				return state.products.filter(
+					product => product.categoryId === state.filters.category
+				)			
+			} else {
 				return state.products
 			}
 		}
@@ -21,8 +21,11 @@ export default {
 	mutations: {
 		refreshProducts (state, products) {
 			state.products = products
-		}
-		
+		},
+
+		setFilters (state, filters) {
+			state.filters = filters
+		}	
 	},
 
 	actions: {
