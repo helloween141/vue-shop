@@ -50,18 +50,12 @@ export default {
     selectCategory (categoryId) {
       this.currentCategoryId = categoryId
 
-      this.filters = Object.assign({}, this.filters, { category: categoryId })
-
-      this.setFilters(this.filters)
+      this.setFilters({ category: categoryId })
     },
 
     setSearchText () {
-
-      this.filters = Object.assign({}, this.filters, { searchText: this.searchText })
-
-      this.setFilters(this.filters)
+      this.setFilters({ searchText: this.searchText })
     }
-
   }
 }
 </script>

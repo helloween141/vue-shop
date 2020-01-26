@@ -1,8 +1,10 @@
 <template>
   <button type="button" class="btn btn-info" data-toggle="dropdown">
-    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
-      <span class="badge badge-pill badge-danger"> {{ cartCount }}
-    </span>
+
+  	<router-link class="nav-link" :to="'/cart'">
+	      <span class="badge badge-pill badge-danger">Cart {{ cartCount }}</span>
+    </router-link>
+
   </button>
 </template>
 

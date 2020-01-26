@@ -50,11 +50,6 @@ export default {
         },
       ]
     }
-  },
-  methods: {
-    setActive() {
-      alert(1)
-    }
   }
 }
 </script>

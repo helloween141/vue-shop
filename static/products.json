@@ -8,27 +8,57 @@
       "price": 40,
       "availableInventory": 5,
       "rating": 5,
-      "image": "american-idiot.jpg"
+      "image": "american-idiot.png"
     },
     {
       "id": 11,
-      "categoryId": 1,
-      "artist": "Kiss",
-      "title": "Destroyer",
+      "categoryId": 3,
+      "artist": "50 cent",
+      "title": "In da club",
       "price": 50,
       "availableInventory": 3,
-      "rating": 4,
-      "image": "destroyer.jpg"
+      "rating": 5,
+      "image": "50cent-in-da-club.png"
     },
     {
       "id": 12,
       "categoryId": 1,
       "artist": "Queen",
-      "title": "II",
-      "price": 80,
+      "title": "The Miracle",
+      "price": 40,
       "availableInventory": 2,
+      "rating": 5,
+      "image": "queen-the-miracle.png"
+    },
+    {
+      "id": 13,
+      "categoryId": 1,
+      "artist": "The Beatles",
+      "title": "Greatest Hits",
+      "price": 40,
+      "availableInventory": 2,
+      "rating": 5,
+      "image": "the-beatles-greatest-hits.png"
+    },
+    {
+      "id": 14,
+      "categoryId": 1,
+      "artist": "Green Day",
+      "title": "Warning",
+      "price": 30,
+      "availableInventory": 4,
       "rating": 3,
-      "image": "logo.png"
-    }
+      "image": "green-day-warning.png"
+    },
+    {
+      "id": 15,
+      "categoryId": 2,
+      "artist": "Madonna",
+      "title": "Who's that girl",
+      "price": 50,
+      "availableInventory": 4,
+      "rating": 3,
+      "image": "madonna-whos-that-girl.png"
+    }         
   ]
 }

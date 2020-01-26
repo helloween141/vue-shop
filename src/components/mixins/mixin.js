@@ -1,7 +1,7 @@
 export const mixin = {
    methods: {
         getImage (filename) {
-          return require(`@/assets/images/${filename}`)
+          return require(`@/assets/covers/${filename}`)
       }
    }
 }
