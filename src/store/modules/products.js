@@ -9,7 +9,7 @@ export default {
 	getters: {
 		allProducts (state) {
 			let productsList = state.products
-			console.log(state.filters)
+		
 			// Фильтрация по категории
 			if (state.filters.category) {
 				productsList = productsList.filter(
@@ -25,12 +25,17 @@ export default {
 				)			
 			}	
 
+			// Сортировка
 			if (state.filters.sortType) {
 				switch (state.filters.sortType) {
-					case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)); break;
-					case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0)); break;
-					case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)); break;
-					case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)); break;
+					case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)); 
+					break;
+					case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0)); 
+					break;
+					case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)); 
+					break;
+					case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)); 
+					break;
 				}
 				 
 			}

@@ -8,12 +8,18 @@ export default {
 			return state.cart.length || 0
 		},
 
-		cartAllProducts (state) {
-			return state.cart 
+		cartAllProducts (state, getters, rootState, rootGetters) {
+			let products = rootState.products.products
+
+			for (let i = 0; i < state.cart.length; i++) {
+
+			}
+			return products
 		},
 
 		cartProductAmount (state, productId) {
 			return function (productId) {
+				// return state.cart.filter(product => product.id === productId).length
 				let count = 0
 			    for (let i = 0; i < state.cart.length; i++) {
 			        if (productId === state.cart[i]) {
@@ -32,9 +38,7 @@ export default {
 		},
 
 		removeProduct (state, product) {
-			/*
-				TODO: remove product logic
-			*/
+			delete state.cart[product.id]
 		},
 	}
 }

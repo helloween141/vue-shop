@@ -16,20 +16,20 @@
                                         </div>
                                         <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
                                             <div class="cart_item_name cart_info_col">
-                                                <div class="cart_item_title">{{ product.title }}</div>
-                                                <div class="cart_item_text">{{ product.artist }}</div>
+                                                <div class="cart_item_title">Product</div>
+                                                <div class="cart_item_text">{{ product.artist }}.<br /> {{ product.title }}</div>
                                             </div>
                                             <div class="cart_item_quantity cart_info_col">
                                                 <div class="cart_item_title">Quantity</div>
-                                                <div class="cart_item_text">1</div>
+                                                <div class="cart_item_text">{{ product.amount }}</div>
                                             </div>
                                             <div class="cart_item_price cart_info_col">
                                                 <div class="cart_item_title">Price</div>
-                                                <div class="cart_item_text">22000$</div>
+                                                <div class="cart_item_text">{{ product.price | priceFormatterFilter }}</div>
                                             </div>
                                             <div class="cart_item_total cart_info_col">
                                                 <div class="cart_item_title">Total</div>
-                                                <div class="cart_item_text">22000$</div>
+                                                <div class="cart_item_text">{{ product.price | priceFormatterFilter }}</div>
                                             </div>
                                         </div>
                                     </li>
@@ -61,11 +61,20 @@
 import {mapGetters, mapMutations} from 'vuex'
 
 import { mixin } from './mixins/mixin.js'
+
+import priceFormatterFilter from './filters/price-formatter.js'
+
 export default {
   name: 'Cart',
 
+  mixins: [mixin],
+
+  filters: {
+    priceFormatterFilter
+  },
+
   computed: { 
-    ...mapGetters(['cartAllProducts', 'cartCount', 'cartProductAmount'])
+    ...mapGetters(['cartAllProducts'])
   },
 
 }
