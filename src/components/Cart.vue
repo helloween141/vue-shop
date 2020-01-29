@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12 text-left">
-      	<h1 class="mt-4">Shopping Cart <small> (1 item in your cart) </small></h1>
+      	<h1 class="mt-4">Shopping Cart</h1>
       	<hr />
         <div class="cart_section">
             <div class="container-fluid">
@@ -21,7 +21,11 @@
                                             </div>
                                             <div class="cart_item_quantity cart_info_col">
                                                 <div class="cart_item_title">Quantity</div>
-                                                <div class="cart_item_text">{{ product.amount }}</div>
+                                                <div class="cart_item_text">
+                                                    <button @click="decAmount(product)">-</button>
+                                                    {{ product.amount }}
+                                                    <button @click="incAmount(product)">+</button>
+                                                </div>
                                             </div>
                                             <div class="cart_item_price cart_info_col">
                                                 <div class="cart_item_title">Price</div>
@@ -29,7 +33,7 @@
                                             </div>
                                             <div class="cart_item_total cart_info_col">
                                                 <div class="cart_item_title">Total</div>
-                                                <div class="cart_item_text">{{ product.price | priceFormatterFilter }}</div>
+                                                <div class="cart_item_text">{{ (calcProductTotalPrice(product.price, product.amount)) | priceFormatterFilter  }}</div>
                                             </div>
                                         </div>
                                     </li>
@@ -38,7 +42,7 @@
                             <div class="order_total">
                                 <div class="order_total_content text-md-right">
                                     <div class="order_total_title">Order Total:</div>
-                                    <div class="order_total_amount">22000$</div>
+                                    <div class="order_total_amount">{{ cartTotalPrice | priceFormatterFilter }}</div>
                                 </div>
                             </div>
                             <div class="cart_buttons">
@@ -74,8 +78,28 @@ export default {
   },
 
   computed: { 
-    ...mapGetters(['cartAllProducts'])
+
+    ...mapGetters(['cartAllProducts', 'cartTotalPrice'])
+
   },
+
+  methods: {
+
+    ...mapMutations(['addProduct', 'removeProduct']),
+
+    calcProductTotalPrice (price, amount) {
+        return price * amount
+    },
+
+    incAmount (product) {
+        this.addProduct(product)
+    },
+
+    decAmount (product) {
+        this.removeProduct(product)
+    }
+
+  }
 
 }
 </script>
