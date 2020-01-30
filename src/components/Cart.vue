@@ -46,8 +46,11 @@
                                 </div>
                             </div>
                             <div class="cart_buttons">
-                              <button type="button" class="button cart_button_clear">Continue Shopping</button>
-                              <button type="button" class="button cart_button_checkout">Checkout</button>
+                                <router-link :to="'/'">
+                                    <button type="button" class="button cart_button_clear">Continue Shopping</button>
+                                </router-link>
+
+                                <button type="button" class="button cart_button_checkout" @click="checkout()">Checkout</button>
                             </div>
                         </div>
                     </div>
@@ -97,6 +100,11 @@ export default {
 
     decAmount (product) {
         this.removeProduct(product)
+    },
+
+    async checkout() {
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        this.$router.push('checkout')
     }
 
   }

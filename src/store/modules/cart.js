@@ -12,7 +12,6 @@ export default {
 
 		// Все товары
 		cartAllProducts (state, getters, rootState) {
-			console.log(state.cart)
 			return state.cart.map(x => Object.assign(x, rootState.products.products.find(y => y.id == x.id)))
 		},
 
