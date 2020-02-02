@@ -1,43 +1,38 @@
 <template>
   <div>
-    <div class="row">
-     
-      <ul class="nav justify-content-left">
-        <li class="nav-item">
-           <span> 
-            <font-awesome-icon icon="filter" /> Sort by:
-           </span> 
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#" @click="setSortType('id')">Newest</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#" @click="setSortType('artist_name')">Artist name</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" @click="setSortType('price_desc')">Price DESC</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" @click="setSortType('price_asc')">Price ASC</a>
-        </li>
-      </ul>
-    </div>  
-
+    <div id="filter-block">
+      <div class="row">
+        <label class="col-sm-2 col-form-label">
+          <font-awesome-icon icon="filter" />Sort by:
+        </label>
+        <div class="col-sm-10">
+          <select class="form-control" v-model="sortType" @change="setSortType">
+            <option value="id">Newest</option>
+            <option value="artist_name">Artist name</option>
+            <option value="price_desc">Price DESC</option>
+            <option value="price_asc">Price ASC</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="row" v-if="allProducts.length">
       <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts" :key="product.id">
         <div class="card h-100">
           <div class="card-img">
-            <a href="#">
+            <router-link :to="{ name: 'product', params: { productId: product.id }}">
               <img class="card-img-top" :src="getImage(product.image)" />
+            </router-link>
             </a>
           </div>
           <div class="card-body">
             <h4 class="card-title">
-              <a href="#">
+              <router-link :to="{ name: 'product', params: { productId: product.id }}">
                 {{ product.artist }}.<br /> {{ product.title }}
-              </a>
+              </router-link>
             </h4>
-            <h5>${{ product.price | priceFormatterFilter }}</h5>
+            <h5>
+              ${{ product.price | priceFormatterFilter }}
+            </h5>
             <div class="card-text">
               <small class="text-muted">
                 Available: {{ product.availableInventory }} pc.
@@ -48,22 +43,21 @@
             </small>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary" @click="addToCart(product)"
-                    :disabled="!canAddToCart(product)">
-              Add to cart
+            <button class="btn btn-primary" @click="addToCart(product)" :disabled="!canAddToCart(product)">
+              <font-awesome-icon icon="cart-plus" />
+              Buy
             </button>
           </div>
         </div>
       </div>
-    </div>  
+    </div>
     <div class="row" v-else>
       <p> Sorry, products not found! </p>
-    </div>  
+    </div>
   </div>
 </template>
-
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 import { mixin } from './mixins/mixin.js'
 import capitalizeFilter from './filters/capitalize.js'
@@ -74,6 +68,12 @@ const axios = require('axios')
 
 export default {
   name: 'ProductsList',
+
+  data() {
+    return {
+      sortType: 'id'
+    }
+  },
 
   mixins: [mixin],
 
@@ -87,11 +87,11 @@ export default {
   },
 
 
-  mounted: function () {
+  mounted: function() {
     this.$store.dispatch('loadProducts')
   },
 
-  computed: { 
+  computed: {
     ...mapGetters(['allProducts', 'cartCount', 'cartProductAmount'])
   },
 
@@ -99,22 +99,21 @@ export default {
 
     ...mapMutations(['addProduct', 'refreshProducts', 'setFilters']),
 
-    canAddToCart (product) {
+    canAddToCart(product) {
       return this.cartProductAmount(product.id) < product.availableInventory
     },
 
-    addToCart (product) {
+    addToCart(product) {
       this.addProduct(product)
     },
 
-    setSortType (sortType) {
-      this.setFilters({ sortType: sortType })
+    setSortType() {
+      this.setFilters({ sortType: this.sortType })
     }
 
   }
 }
+
 </script>
-
 <style scoped>
-
 </style>

@@ -44,5 +44,9 @@ export default {
 
 			Vue.set(state.cart[index], 'amount', amount)
 		},
+
+		clear (state) {
+			state.cart = []
+		}
 	}
 }

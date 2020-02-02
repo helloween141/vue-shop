@@ -1,36 +1,26 @@
 <template>
   <div>
     <div class="input-group mb-3">
-       <input type="text" class="form-control" placeholder="Type text for search..." aria-label="" 
-              aria-describedby="basic-addon1" v-model="searchText" @input="setSearchText()">
+      <input type="text" class="form-control" placeholder="Type text for search..." aria-label="" aria-describedby="basic-addon1" v-model="searchText" @input="setSearchText()">
     </div>
-
     <div class="list-group">
-        <a href="#" class="list-group-item"
-           @click="selectCategory(null)"
-           :class="{'active': !currentCategoryId}"
-        > 
-          All
-        </a>    
-        <a href="#" class="list-group-item"
-           v-for="category in categories"
-           @click="selectCategory(category.id)"
-           :class="{'active': currentCategoryId === category.id}"
-        >
-          {{ category.title }}
-        </a>     
+      <a href="#" class="list-group-item" @click="selectCategory(null)" :class="{'active': !currentCategoryId}">
+        All categories
+      </a>
+      <a href="#" class="list-group-item" v-for="category in categories" @click="selectCategory(category.id)" :class="{'active': currentCategoryId === category.id}">
+        {{ category.title }}
+      </a>
     </div>
-  </div>  
+  </div>
 </template>
-
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { eventBus } from '../main'
 const axios = require('axios')
 
 export default {
   name: 'LeftMenu',
-  data () {
+  data() {
     return {
       categories: [],
       currentCategoryId: null,
@@ -38,7 +28,7 @@ export default {
       filters: {}
     }
   },
-  created: function () {
+  created: function() {
     axios.get('/static/categories.json').then(response => {
       this.categories = response.data.categories
     })
@@ -47,20 +37,18 @@ export default {
   methods: {
     ...mapMutations(['setFilters']),
 
-    selectCategory (categoryId) {
+    selectCategory(categoryId) {
       this.currentCategoryId = categoryId
 
       this.setFilters({ category: categoryId })
     },
 
-    setSearchText () {
+    setSearchText() {
       this.setFilters({ searchText: this.searchText })
     }
   }
 }
+
 </script>
-
-
 <style scoped>
-
 </style>
