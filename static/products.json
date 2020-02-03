@@ -2,6 +2,7 @@
   "products": [
     {
       "id": 10,
+      "url": "green-day-american-idiot",
       "categoryId": 1,
       "artist": "Green Day",
       "title": "American Idiot",
@@ -12,6 +13,7 @@
     },
     {
       "id": 11,
+      "url": "50cent-in-da-club",
       "categoryId": 3,
       "artist": "50 cent",
       "title": "In da club",
@@ -22,6 +24,7 @@
     },
     {
       "id": 12,
+      "url": "queen-the-miracle",
       "categoryId": 1,
       "artist": "Queen",
       "title": "The Miracle",
@@ -32,6 +35,7 @@
     },
     {
       "id": 13,
+      "url": "the-beatles-greatest-hits",
       "categoryId": 1,
       "artist": "The Beatles",
       "title": "Greatest Hits",
@@ -42,6 +46,7 @@
     },
     {
       "id": 14,
+      "url": "green-day-warning",
       "categoryId": 1,
       "artist": "Green Day",
       "title": "Warning",
@@ -52,6 +57,7 @@
     },
     {
       "id": 15,
+      "url": "madonna-whos-that-girl",
       "categoryId": 2,
       "artist": "Madonna",
       "title": "Who's that girl",

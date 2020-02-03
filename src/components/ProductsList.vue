@@ -19,14 +19,14 @@
       <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts" :key="product.id">
         <div class="card h-100">
           <div class="card-img">
-            <router-link :to="{ name: 'product', params: { productId: product.id }}">
+            <router-link :to="{ name: 'product', params: { productId: product.id, url: product.url }}">
               <img class="card-img-top" :src="getImage(product.image)" />
             </router-link>
             </a>
           </div>
           <div class="card-body">
             <h4 class="card-title">
-              <router-link :to="{ name: 'product', params: { productId: product.id }}">
+              <router-link :to="{ name: 'product', params: { productId: product.id, url: product.url }}">
                 {{ product.artist }}.<br /> {{ product.title }}
               </router-link>
             </h4>
@@ -62,9 +62,6 @@ import { mapGetters, mapMutations } from 'vuex'
 import { mixin } from './mixins/mixin.js'
 import capitalizeFilter from './filters/capitalize.js'
 import priceFormatterFilter from './filters/price-formatter.js'
-
-
-const axios = require('axios')
 
 export default {
   name: 'ProductsList',

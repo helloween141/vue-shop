@@ -3,7 +3,8 @@ const axios = require('axios')
 export default {
 	state: {
 		products: [],
-		filters: []
+		filters: [],
+		product: null
 	},
 
 	getters: {
@@ -28,19 +29,27 @@ export default {
 			// Сортировка
 			if (state.filters.sortType) {
 				switch (state.filters.sortType) {
-					case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)); 
+					case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
 					break;
-					case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0)); 
+					case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0))
 					break;
-					case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)); 
+					case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
 					break;
-					case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)); 
+					case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0))
 					break;
 				}
 				 
 			}
 			
 			return productsList
+		},
+
+		oneProduct (state) {
+			return function (productId) {
+				console.log(state.products)
+				console.log(state.products.find(product => product.id === 10))
+				return state.products.find(product => product.id === productId)
+			}
 		}
 	},
 
@@ -49,17 +58,28 @@ export default {
 			state.products = products
 		},
 
+		refreshProduct (state, product) {
+			state.product = product
+			console.log(state.product)
+		},
+
 		setFilters (state, filters) {
 			state.filters = Object.assign({}, state.filters, filters)
 		}	
 	},
 
 	actions: {
-		loadProducts (ctx) {
+		loadProducts (ctx, payload) {
 	      axios.get('/static/products.json')
 	      .then(response => {
 	        const products = response.data.products
-	        ctx.commit('refreshProducts', products)
+	        if (payload && payload.productId) {
+	        	let product = products.find(product => product.id == payload.productId)
+	        	console.log(123)
+	        	ctx.commit('refreshProduct', product) 
+	        } else {
+	        	ctx.commit('refreshProducts', products) 
+	        }
 	      })
 	      .catch(error => {
 	        console.log(error)

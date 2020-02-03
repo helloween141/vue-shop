@@ -14,12 +14,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Catalog',
+      name: 'catalog',
       component: Catalog
     },
     {
-      path: '/product/:id',
-      name: 'Product',
+      path: '/product/:url',
+      name: 'product',
+      props: true,
       component: Product
     },
     {
