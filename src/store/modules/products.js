@@ -44,12 +44,8 @@ export default {
 			return productsList
 		},
 
-		oneProduct (state) {
-			return function (productId) {
-				console.log(state.products)
-				console.log(state.products.find(product => product.id === 10))
-				return state.products.find(product => product.id === productId)
-			}
+		dataProduct (state) {
+			return state.product
 		}
 	},
 
@@ -60,7 +56,6 @@ export default {
 
 		refreshProduct (state, product) {
 			state.product = product
-			console.log(state.product)
 		},
 
 		setFilters (state, filters) {
@@ -74,8 +69,7 @@ export default {
 	      .then(response => {
 	        const products = response.data.products
 	        if (payload && payload.productId) {
-	        	let product = products.find(product => product.id == payload.productId)
-	        	console.log(123)
+	        	const product = products.find(product => product.id == payload.productId)
 	        	ctx.commit('refreshProduct', product) 
 	        } else {
 	        	ctx.commit('refreshProducts', products) 

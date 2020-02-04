@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import LeftMenu from './LeftMenu'
+import LeftMenu from '../components/LeftMenu'
 import ProductsList from './ProductsList'
 
 export default {

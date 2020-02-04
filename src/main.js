@@ -4,10 +4,10 @@ import router from './router'
 import store from './store'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faAngleUp, faShoppingCart, faCartPlus } from '@fortawesome/free-solid-svg-icons'
+import { faFilter, faShoppingCart, faAngleUp, faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faUserSecret, faAngleUp, faShoppingCart, faCartPlus)
+library.add(faFilter, faAngleUp, faShoppingCart, faCartPlus)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -26,3 +26,4 @@ new Vue({
   store,
   render: h => h(App)
 })
+

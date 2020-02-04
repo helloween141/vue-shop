@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Catalog from '@/components/Catalog'
-import Product from '@/components/Product'
-import About from '@/components/About'
-import Cart from '@/components/Cart'
-import Checkout from '@/components/Checkout'
+import Catalog from '@/views/Catalog'
+import Product from '@/views/Product'
+import About from '@/views/About'
+import Cart from '@/views/Cart'
+import Checkout from '@/views/Checkout'
 
 
 Vue.use(Router)

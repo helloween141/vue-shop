@@ -69,9 +69,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import { mixin } from './mixins/mixin.js'
-
-import priceFormatterFilter from './filters/price-formatter.js'
+import { mixin } from '../mixins/mixin.js'
+import priceFormatterFilter from '../filters/price-formatter.js'
 
 export default {
   name: 'Cart',
