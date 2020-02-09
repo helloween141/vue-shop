@@ -14,9 +14,10 @@
   </div>
 </template>
 <script>
+
 import { mapGetters, mapMutations } from 'vuex'
 import { eventBus } from '../main'
-const axios = require('axios')
+const firebase = require('firebase')
 
 export default {
   name: 'LeftMenu',
@@ -28,10 +29,14 @@ export default {
       filters: {}
     }
   },
-  created: function() {
-    axios.get('/static/categories.json').then(response => {
-      this.categories = response.data.categories
+
+  async mounted() { 
+    await firebase.database().ref('categories').once('value', snapshot => {
+        snapshot.forEach(category => {
+          this.categories.push(category.val())
+      })
     })
+
   },
 
   methods: {
@@ -48,7 +53,7 @@ export default {
     }
   }
 }
-
 </script>
+
 <style scoped>
 </style>

@@ -1,4 +1,5 @@
 const axios = require('axios')
+const firebase = require('firebase')
 
 export default {
 	state: {
@@ -55,15 +56,19 @@ export default {
 	},
 
 	actions: {
-		loadProducts (ctx) {
-	      axios.get('/static/products.json')
-	      .then(response => {
-	        const products = response.data.products
-	        ctx.commit('refreshProducts', products)
-	      })
-	      .catch(error => {
-	        console.log(error)
-	      });
+		async loadProducts (ctx) {
+			try {
+				let productsList = []
+				await firebase.database().ref('products').once('value', snapshot => {
+				  snapshot.forEach(product => {
+				  	productsList.push(product.val())
+				  });
+				});
+				ctx.commit('refreshProducts', productsList)
+			}
+		    catch(error) {
+		       console.log(error)
+		    }
 		}
 	}
 }
