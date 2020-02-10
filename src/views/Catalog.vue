@@ -6,10 +6,10 @@
           <hr />
       </div>
       <div class="col-lg-3">
-        <LeftMenu />
+        <left-menu />
       </div>
       <div class="col-lg-9">
-        <ProductsList />
+        <products-list />
       </div>
     </div>
   </div>

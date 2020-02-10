@@ -43,10 +43,7 @@
             </small>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary" @click="addToCart(product)" :disabled="!canAddToCart(product)">
-              <font-awesome-icon icon="cart-plus" />
-              Buy
-            </button>
+            <buy-button :product="product" />
           </div>
         </div>
       </div>
@@ -59,12 +56,18 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import { mixin } from '../mixins/mixin.js'
-import capitalizeFilter from '../filters/capitalize.js'
-import priceFormatterFilter from '../filters/price-formatter.js'
+import BuyButton from '../components/BuyButton'
+
+import { image } from '../mixins/image.mixin'
+import capitalizeFilter from '../filters/capitalize.filter'
+import priceFormatterFilter from '../filters/price-formatter.filter'
 
 export default {
   name: 'ProductsList',
+
+  components: {
+    BuyButton
+  },
 
   data() {
     return {
@@ -72,7 +75,7 @@ export default {
     }
   },
 
-  mixins: [mixin],
+  mixins: [image],
 
   filters: {
     capitalizeFilter,
@@ -84,25 +87,17 @@ export default {
   },
 
 
-  mounted: function() {
-    this.$store.dispatch('loadProducts')
+  async mounted() {
+    await this.$store.dispatch('loadProducts')
   },
 
   computed: {
-    ...mapGetters(['allProducts', 'cartCount', 'cartProductAmount'])
+    ...mapGetters(['allProducts'])
   },
 
   methods: {
 
-    ...mapMutations(['addProduct', 'refreshProducts', 'setFilters']),
-
-    canAddToCart(product) {
-      return this.cartProductAmount(product.id) < product.availableInventory
-    },
-
-    addToCart(product) {
-      this.addProduct(product)
-    },
+    ...mapMutations(['setFilters']),
 
     setSortType() {
       this.setFilters({ sortType: this.sortType })

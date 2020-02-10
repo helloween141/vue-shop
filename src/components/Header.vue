@@ -1,8 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <router-link :to="'/'">
-        <a class="navbar-brand" href="/" v-text="shopname"></a>
+      <router-link class="navbar-brand" :to="'/'">
+        i-shop
       </router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,6 @@ export default {
   },
   data() {
     return {
-      shopname: 'iShop',
       links: [{
           name: 'Catalog',
           url: '/',
@@ -40,12 +39,7 @@ export default {
           name: 'About',
           url: '/about',
           isCurrent: false
-        },
-        {
-          name: 'Contact',
-          url: '/contact',
-          isCurrent: false
-        },
+        }
       ]
     }
   }
