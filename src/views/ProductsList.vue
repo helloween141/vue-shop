@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if="!loading">
+
     <div id="filter-block">
       <div class="row">
         <label class="col-sm-2 col-form-label">
@@ -15,6 +16,7 @@
         </div>
       </div>
     </div>
+
     <div class="row" v-if="allProducts.length">
       <div class="col-lg-4 col-md-6 mb-4" v-for="product in allProducts" :key="product.id">
         <div class="card h-100">
@@ -51,7 +53,14 @@
     <div class="row" v-else>
       <p> Sorry, products not found! </p>
     </div>
+
   </div>
+  <div v-else>
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>  
+
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -71,7 +80,8 @@ export default {
 
   data() {
     return {
-      sortType: 'id'
+      sortType: 'id',
+      loading: null
     }
   },
 
@@ -88,7 +98,9 @@ export default {
 
 
   async mounted() {
+    this.loading = true
     await this.$store.dispatch('loadProducts')
+    this.loading = false
   },
 
   computed: {

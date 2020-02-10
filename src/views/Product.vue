@@ -1,6 +1,5 @@
 <template>
-
-  <div class="container">
+  <div class="container" v-if="dataProduct">
     <div class="row ">
           <div class="col-md-6 mt-4">
             <img class="img-fluid" :src="getImage(dataProduct.image)" />
@@ -27,11 +26,14 @@
             <router-link :to="'/'">
                 <button type="button" class="btn btn-secondary">Back to catalog</button>
             </router-link>
-
           </div>
-
     </div>
   </div>
+  <div v-else>
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>    
+  </div>  
 </template>
 
 <script>
@@ -59,7 +61,8 @@ export default {
   },
 
   async beforeRouteEnter (to, from, next) {
-    store.dispatch('loadProduct', { productId: to.params.productId })
+    console.log(from, to)
+    await store.dispatch('loadProduct', { productId: to.params.productId })
     next();
   },
 
