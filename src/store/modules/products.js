@@ -65,26 +65,31 @@ export default {
 	},
 
 	actions: {
-		async loadProducts (ctx, payload) {
+		async loadProducts (ctx) {
 			try {
 				let productsList = []
 				await firebase.database().ref('products').once('value', snapshot => {
-				  snapshot.forEach(product => {
-				  	productsList.push(product.val())
-				  });
-				});
+					snapshot.forEach(product => {
+					  	productsList.push(product.val())
+					});
+				});	
 
-		        if (payload && payload.productId) {
-		        	const product = productsList.find(product => product.id == payload.productId)
-		        	ctx.commit('refreshProduct', product) 
-		        } else {
-		        	ctx.commit('refreshProducts', productsList) 
-		        }
-		        
+				ctx.commit('refreshProducts', productsList) 	
 			}
 		    catch(error) {
 		       console.log(error)
 		    }
+		},
+
+		async loadProduct (ctx, payload) {
+			try {
+			    await firebase.database().ref('products').orderByChild('id').equalTo(payload.productId).once('child_added', snapshot => {   
+			        ctx.commit('refreshProduct', snapshot.val()) 
+			    }); 	
+			}	
+	  		catch(error) {
+			    console.log(error)
+			}
 		}
 	}
 }

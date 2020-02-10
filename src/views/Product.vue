@@ -59,7 +59,7 @@ export default {
   },
 
   async beforeRouteEnter (to, from, next) {
-    await store.dispatch('loadProducts', { productId: to.params.productId })
+    store.dispatch('loadProduct', { productId: to.params.productId })
     next();
   },
 
