@@ -73,12 +73,14 @@ export default {
 				  	productsList.push(product.val())
 				  });
 				});
+
 		        if (payload && payload.productId) {
-		        	const product = products.find(product => product.id == payload.productId)
+		        	const product = productsList.find(product => product.id == payload.productId)
 		        	ctx.commit('refreshProduct', product) 
 		        } else {
-		        	ctx.commit('refreshProducts', products) 
+		        	ctx.commit('refreshProducts', productsList) 
 		        }
+		        
 			}
 		    catch(error) {
 		       console.log(error)
