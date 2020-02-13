@@ -33,16 +33,31 @@ export default {
 
 		// Добавить товар в корзину
 		addProduct (state, product) {
-			let index = state.cart.findIndex(item => item.id === product.id)
-			index >= 0 ? Vue.set(state.cart[index], 'amount', state.cart[index].amount + 1) : state.cart.push({ id: product.id, amount: 1 })
+			state.cart.push({ id: product.id, amount: 1 })
 		},
 
-		// Удалить товар из корзины
+		// Изменить кол-во товара в корзине
+		changeAmountProduct (state, payload) {
+			let index = state.cart.findIndex(item => item.id === payload.productId)
+			let amount = 0
+
+			if (index >= 0) {
+				if (payload.type === 'inc') {
+					amount = state.cart[index].amount + 1 
+				} else if (payload.type === 'dec') {
+					amount = state.cart[index].amount - 1 > 0 ? state.cart[index].amount - 1 : 1
+				}	
+				Vue.set(state.cart[index], 'amount', amount)		
+			}
+		},
+
 		removeProduct (state, product) {
 			let index = state.cart.findIndex(item => item.id === product.id)
-			let amount = state.cart[index].amount - 1 > 0 ? state.cart[index].amount - 1 : 1
+			if (index >= 0) {
+				state.cart.splice(index, 1);
 
-			Vue.set(state.cart[index], 'amount', amount)
+				console.log('id = ' + index)
+			}
 		},
 
 		clear (state) {

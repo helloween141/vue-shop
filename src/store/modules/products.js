@@ -4,8 +4,7 @@ const firebase = require('firebase')
 export default {
 	state: {
 		products: [],
-		filters: [],
-		product: null
+		filters: []
 	},
 
 	getters: {
@@ -55,10 +54,6 @@ export default {
 			state.products = products
 		},
 
-		refreshProduct (state, product) {
-			state.product = product
-		},
-
 		setFilters (state, filters) {
 			state.filters = Object.assign({}, state.filters, filters)
 		}	
@@ -81,11 +76,10 @@ export default {
 		    }
 		},
 
-		async loadProduct (ctx, payload) {
+		async loadProductByUrl (ctx, productUrl) {
 			try {
-			    await firebase.database().ref('products').orderByChild('id').equalTo(payload.productId).once('child_added', snapshot => {   
-			        ctx.commit('refreshProduct', snapshot.val()) 
-			    }); 	
+			    const product = (await firebase.database().ref('products').orderByChild('url').equalTo(productUrl).once('child_added')).val() || {}; 
+			    return {...product}
 			}	
 	  		catch(error) {
 			    console.log(error)

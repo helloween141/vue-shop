@@ -1,6 +1,10 @@
 <template>
   <div id="app">
     <Header />
+    <Toasts
+      :time-out="1000"
+      :closeable="false"
+    ></Toasts>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -22,5 +26,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'assets/index.css'
+  @import 'assets/index.css'
 </style>

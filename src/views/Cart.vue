@@ -13,6 +13,7 @@
                 <th scope="col">Quantity</th>
                 <th scope="col">Price</th>
                 <th scope="col">Total</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -38,26 +39,59 @@
                 <td>
                   {{ (calcProductTotalPrice(product)) | priceFormatterFilter }}
                 </td>
-              </tr>
+                <td>
+                  <span @click="deleteProduct(product)">X</span>
+                </td>  
+              </tr> 
             </tbody>
           </table>
+
           <div class="order_total">
             <div class="order_total_content text-md-right">
               <div class="order_total_title">Order Total:</div>
               <div class="order_total_amount">{{ cartTotalPrice | priceFormatterFilter }}</div>
             </div>
           </div>
-          <div class="cart_buttons">
-            <router-link :to="'/'">
-              <button type="button" class="button cart_button_clear">Continue Shopping</button>
-            </router-link>
-            <button type="button" class="button cart_button_checkout" @click="checkout()" v-if="!isCheckout">
-              Checkout
-            </button>
-            <button type="button" class="button cart_button_checkout" v-if="isCheckout" disabled="">
-              Loading...<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            </button>
-          </div>
+
+          <form>
+            <h3> Order </h3>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input type="text" class="form-control" id="name" placeholder="Enter name" v-model.trim="$v.form.name.$model">
+              <small class="form-text error" v-if="!$v.form.name.required && $v.$dirty"> Name must be required </small>
+              <small class="form-text error" v-if="!$v.form.name.minLength && $v.$dirty"> Name must have at least {{$v.form.name.$params.minLength.min}} letters. </small>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email" v-model.trim="$v.form.email.$model">
+              <small class="form-text error" v-if="!$v.form.email.required && $v.$dirty"> Email must be required </small>
+              <small class="form-text error" v-if="!$v.form.email.email && $v.$dirty"> Incorrect format of email </small>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleInputEmail1">Comment</label>
+              <textarea class="form-control"></textarea>
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="policy">
+              <label class="form-check-label" for="exampleCheck1">I agree to the terms and privacy policy</label>
+            </div>
+
+            <div class="cart_buttons">
+              <router-link :to="'/'">
+                <button type="button" class="button cart_button_clear">Continue Shopping</button>
+              </router-link>
+              <button type="button" class="button cart_button_checkout" @click="checkout()" v-if="!isCheckout">
+                Checkout
+              </button>
+              <button type="button" class="button cart_button_checkout" v-if="isCheckout" disabled="">
+                Loading...<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              </button>
+            </div>
+
+          </form>
         </div>
         <div v-else>
           <p> Cart is empty! </p>
@@ -71,13 +105,19 @@ import { mapGetters, mapMutations } from 'vuex'
 
 import { image } from '../mixins/image.mixin'
 import priceFormatterFilter from '../filters/price-formatter.filter'
+import {email, required, minLength} from 'vuelidate/lib/validators'
 
 export default {
   name: 'Cart',
 
   data() {
     return {
-      isCheckout: false
+      isCheckout: false,
+      form: {
+       name: '',
+       email: '',
+       comment: ''       
+      }
     }
   },
 
@@ -85,6 +125,19 @@ export default {
 
   filters: {
     priceFormatterFilter
+  },
+
+  validations: {
+    form: {
+      name: {
+        required,
+        minLength: minLength(4)
+      },
+      email: {
+        required,
+        email
+      }
+    }
   },
 
   computed: {
@@ -95,26 +148,33 @@ export default {
 
   methods: {
 
-    ...mapMutations(['addProduct', 'removeProduct', 'clear']),
+    ...mapMutations(['changeAmountProduct', 'removeProduct', 'clear']),
 
     calcProductTotalPrice(product) {
       return product.price * product.amount
     },
 
     incAmount(product) {
-      this.addProduct(product)
+      this.changeAmountProduct({productId: product.id, type: 'inc'})
     },
 
     decAmount(product) {
+      this.changeAmountProduct({productId: product.id, type: 'dec'})
+    },
+
+    deleteProduct(product) {
       this.removeProduct(product)
     },
 
     async checkout() {
-      this.isCheckout = true
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      this.clear()
-      this.isCheckout = false
-      this.$router.push('checkout')
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        this.isCheckout = true
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        this.clear()
+        this.isCheckout = false
+        this.$router.push('checkout')
+      }
     }
 
   }
@@ -122,6 +182,7 @@ export default {
 }
 
 </script>
+
 <style scoped>
 .button {
   display: inline-block;
@@ -154,15 +215,17 @@ export default {
   text-align: right
 }
 
-.order_total {
+.order_total, form {
   width: 100%;
-  height: 60px;
-  margin-top: 30px;
+  margin-bottom: 20px;
   border: solid 1px #e8e8e8;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
-  padding-right: 46px;
-  padding-left: 15px;
+  padding-right: 30px;
   background-color: #fff
+}
+
+form {
+  padding: 25px;
 }
 
 .order_total_title {
@@ -181,7 +244,7 @@ export default {
 }
 
 .cart_buttons {
-  margin-top: 60px;
+  margin-bottom: 20px;
   text-align: right
 }
 

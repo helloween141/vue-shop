@@ -38,7 +38,6 @@
 
 <script>
 import store from '../store'	
-import { mapGetters } from 'vuex'
 
 import BuyButton from '../components/BuyButton'
 
@@ -48,6 +47,12 @@ import priceFormatterFilter from '../filters/price-formatter.filter'
 
 export default {
   name: 'Product',
+
+  data() {
+    return {
+      dataProduct: null
+    }
+  },
 
   components: {
     BuyButton
@@ -60,14 +65,8 @@ export default {
     priceFormatterFilter
   },
 
-  async beforeRouteEnter (to, from, next) {
-    console.log(from, to)
-    await store.dispatch('loadProduct', { productId: to.params.productId })
-    next();
-  },
-
-  computed: {
-    ...mapGetters(['dataProduct'])
+  async mounted() {
+    this.dataProduct = await store.dispatch('loadProductByUrl', this.$route.params.url)
   },
 
 }

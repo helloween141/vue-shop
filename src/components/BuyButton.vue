@@ -35,6 +35,7 @@ export default {
 
     addToCart(product) {
       this.addProduct(product)
+      this.$toast.success('Product added in cart!');
       this.status = 'In cart'
     },
   }
