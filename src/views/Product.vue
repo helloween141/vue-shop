@@ -66,7 +66,7 @@ export default {
   },
 
   async mounted() {
-    this.dataProduct = await store.dispatch('loadProductByUrl', this.$route.params.url)
+    this.dataProduct = await store.dispatch('loadProductById', this.$route.params.productId)
   },
 
 }

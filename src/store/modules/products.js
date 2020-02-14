@@ -76,9 +76,9 @@ export default {
 		    }
 		},
 
-		async loadProductByUrl (ctx, productUrl) {
+		async loadProductById (ctx, productId) {
 			try {
-			    const product = (await firebase.database().ref('products').orderByChild('url').equalTo(productUrl).once('child_added')).val() || {}; 
+			    const product = (await firebase.database().ref('products').orderByChild('id').equalTo(productId).once('child_added')).val() || {}; 
 			    return {...product}
 			}	
 	  		catch(error) {

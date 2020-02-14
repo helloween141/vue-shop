@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       sortType: 'id',
-      loading: null
+      loading: true
     }
   },
 
@@ -98,7 +98,6 @@ export default {
 
 
   async mounted() {
-    this.loading = true
     await this.$store.dispatch('loadProducts')
     this.loading = false
   },
