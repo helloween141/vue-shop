@@ -1,24 +1,19 @@
 <template>
-    <button class="btn btn-primary" @click="addToCart(product)" :disabled="!canAddToCart(product)">
-        <font-awesome-icon icon="cart-plus" />
-          {{ status }}
-    </button>
+  <a class="btn-floating halfway-fab waves-effect waves-light red"
+     @click="addToCart(product)"
+     :disabled="!canAddToCart(product)">
+    <i class="material-icons">add_shopping_cart</i>
+  </a>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: 'BuyButton',
-  
-  data () {
-  	return {
-  		status: 'Add to cart'
-  	}
-  },
 
   props: {
-  	product: Object
+    product: Object
   },
 
   computed: {
@@ -26,18 +21,16 @@ export default {
   },
 
   methods: {
-
     ...mapMutations(['addProduct']),
 
-    canAddToCart(product) {
-      return this.cartProductAmount(product.id) < product.availableInventory
+    canAddToCart (product) {
+      return this.cartProductAmount(product.id) < product.available
     },
 
-    addToCart(product) {
+    addToCart (product) {
+      this.$message('Product added to cart!')
       this.addProduct(product)
-      this.$toast.success('Product added in cart!');
-      this.status = 'In cart'
-    },
+    }
   }
 }
 </script>

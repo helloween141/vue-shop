@@ -14,15 +14,14 @@ export default {
 			// Фильтрация по категории
 			if (state.filters.category) {
 				productsList = productsList.filter(
-					product => product.categoryId === state.filters.category
+					product => product.categories ? product.categories.find(cat => cat === state.filters.category) : null
 				)			
 			}
 
 			// Фильтрация по тексту
 			if (state.filters.searchText) {
 				productsList = productsList.filter(
-					product => product.title.includes(state.filters.searchText) ||
-							   product.artist.includes(state.filters.searchText)	
+					product => product.title.toLowerCase().includes(state.filters.searchText.toLowerCase())	
 				)			
 			}	
 
@@ -30,22 +29,20 @@ export default {
 			if (state.filters.sortType) {
 				switch (state.filters.sortType) {
 					case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
-					break;
+					break
+					case 'rating': productsList = productsList.sort((a, b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
+					break					
 					case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0))
-					break;
+					break
 					case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
-					break;
+					break
 					case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0))
-					break;
+					break
 				}
 				 
 			}
 			
 			return productsList
-		},
-
-		dataProduct (state) {
-			return state.product
 		}
 	},
 
@@ -68,7 +65,6 @@ export default {
 					  	productsList.push(product.val())
 					});
 				});	
-
 				ctx.commit('refreshProducts', productsList) 	
 			}
 		    catch(error) {
@@ -76,9 +72,9 @@ export default {
 		    }
 		},
 
-		async loadProductById (ctx, productId) {
-			try {
-			    const product = (await firebase.database().ref('products').orderByChild('id').equalTo(productId).once('child_added')).val() || {}; 
+		async loadProductByUrl (ctx, productUrl) {
+			try { 
+			    const product = (await firebase.database().ref('products').orderByChild('isbn').equalTo(productUrl).once('child_added')).val() || {}; 
 			    return {...product}
 			}	
 	  		catch(error) {

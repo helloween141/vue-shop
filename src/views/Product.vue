@@ -1,75 +1,80 @@
 <template>
   <div class="container" v-if="dataProduct">
-    <div class="row ">
-          <div class="col-md-6 mt-4">
-            <img class="img-fluid" :src="getImage(dataProduct.image)" />
-          </div>
-
-          <div class="col-md-6 mt-4 text-lg-left">
-            <h3 class="title">{{ dataProduct.artist }}. {{ dataProduct.title }}</h3>
-            <h4>Price: ${{ dataProduct.price | priceFormatterFilter }}</h4>
-            <p class="text">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. 
-              Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!
-          	</p>
-            <span>
-              Rating: 
+    <div class="row">
+      <div class="col s12">
+        <h3>{{ dataProduct.title }}</h3>
+      </div>
+      <div class="col s12">
+        <div class="col s3">
+          <img class="img-fluid" :src="dataProduct.thumbnailUrl"/>
+        </div>
+        <div class="col s9">
+          <span> Price: ${{ dataProduct.price | priceFormatterFilter }}</span>
+          <span>
+              Rating:
               <small class="text-muted" v-for="rate in dataProduct.rating">
                 ★
               </small>
             </span>
-                
-            <div>
-              <buy-button :product="dataProduct" />
-            </div>  
-
-            <router-link :to="'/'">
-                <button type="button" class="btn btn-secondary">Back to catalog</button>
-            </router-link>
+          <div>
+            <buy-button :product="dataProduct"/>
           </div>
+        </div>
+
+
+        <router-link :to="'/'">
+          <button type="button" class="btn btn-secondary">Back to catalog</button>
+        </router-link>
+      </div>
+
+      <div class="col s12 text-lg-left">
+        <p class="text" v-if="dataProduct.longDescription">
+          {{ dataProduct.longDescription }}
+        </p>
+        <p v-else>
+          No description
+        </p>
+      </div>
     </div>
   </div>
   <div v-else>
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>    
-  </div>  
+    <div class="progress">
+      <div class="indeterminate"></div>
+    </div>
+  </div>
 </template>
 
 <script>
-import store from '../store'	
+  import store from '../store'
 
-import BuyButton from '../components/BuyButton'
+  import BuyButton from '../components/BuyButton'
 
-import { image } from '../mixins/image.mixin'
-import capitalizeFilter from '../filters/capitalize.filter'
-import priceFormatterFilter from '../filters/price-formatter.filter'
+  import capitalizeFilter from '../filters/capitalize.filter'
+  import priceFormatterFilter from '../filters/price-formatter.filter'
 
-export default {
-  name: 'Product',
+  export default {
+    name: 'Product',
 
-  data() {
-    return {
-      dataProduct: null
-    }
-  },
+    data() {
+      return {
+        dataProduct: null
+      }
+    },
 
-  components: {
-    BuyButton
-  },
+    components: {
+      BuyButton
+    },
 
-  mixins: [image],
+    filters: {
+      capitalizeFilter,
+      priceFormatterFilter
+    },
 
-  filters: {
-    capitalizeFilter,
-    priceFormatterFilter
-  },
+    async mounted() {
+      this.dataProduct = await store.dispatch('loadProductByUrl', this.$route.params.url)
+    },
 
-  async mounted() {
-    this.dataProduct = await store.dispatch('loadProductById', this.$route.params.productId)
-  },
-
-}
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -4,8 +4,7 @@ import Catalog from '@/views/Catalog'
 import Product from '@/views/Product'
 import About from '@/views/About'
 import Cart from '@/views/Cart'
-import Checkout from '@/views/Checkout'
-
+import SuccessOrder from '@/views/SuccessOrder'
 
 Vue.use(Router)
 
@@ -20,7 +19,6 @@ export default new Router({
     {
       path: '/product/:url',
       name: 'product',
-      props: true,
       component: Product
     },
     {
@@ -34,9 +32,9 @@ export default new Router({
       component: Cart
     },
     {
-      path: '/checkout',
-      name: 'checkout',
-      component: Checkout
+      path: '/success-order/:orderId',
+      name: 'success-order',
+      component: SuccessOrder
     },
   ]
 })

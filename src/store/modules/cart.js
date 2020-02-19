@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import firebase from 'firebase'
+
 export default {
 	state: {
 		cart: []
@@ -32,12 +34,13 @@ export default {
 	mutations: {
 
 		// Добавить товар в корзину
-		addProduct (state, product) {
-			state.cart.push({ id: product.id, amount: 1 })
+		addProduct(state, product) {
+			let index = state.cart.findIndex(item => item.id === product.id)
+			index >= 0 ? Vue.set(state.cart[index], 'amount', state.cart[index].amount + 1) : state.cart.push({ id: product.id, amount: 1 })
 		},
 
 		// Изменить кол-во товара в корзине
-		changeAmountProduct (state, payload) {
+		changeAmountProduct(state, payload) {
 			let index = state.cart.findIndex(item => item.id === payload.productId)
 			let amount = 0
 
@@ -51,17 +54,29 @@ export default {
 			}
 		},
 
-		removeProduct (state, product) {
+		removeProduct(state, product) {
 			let index = state.cart.findIndex(item => item.id === product.id)
 			if (index >= 0) {
 				state.cart.splice(index, 1);
-
-				console.log('id = ' + index)
 			}
 		},
 
-		clear (state) {
+		clear(state) {
 			state.cart = []
 		}
+	},
+
+	actions: {
+		async createOrder({ dispatch, commit }, userData) {
+			try {
+				const order = await firebase.database().ref('orders').push(userData);
+				commit('clear')
+				return order.key
+			}
+	  		catch(error) {
+			    console.log(error)
+			}			
+		}
+
 	}
 }

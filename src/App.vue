@@ -1,13 +1,9 @@
 <template>
   <div id="app">
     <Header />
-    <Toasts
-      :time-out="1000"
-      :closeable="false"
-    ></Toasts>
-    <keep-alive>
+    <main>
       <router-view/>
-    </keep-alive>
+    </main>
     <Footer />
   </div>
 </template>
@@ -26,5 +22,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import 'assets/index.css'
+  @import '~materialize-css/dist/css/materialize.min';
+  @import 'assets/index.css';
 </style>
