@@ -21,6 +21,8 @@ export default {
     pageChangeHandler(page) {
       this.$router.push(`${this.$route.path}?page=${page}`)
       this.items = this.allItems[page - 1] || this.items[0]
+
+      window.scrollTo(0, 0)
     }
   }
 }

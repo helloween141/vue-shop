@@ -5,17 +5,19 @@
              aria-describedby="basic-addon1" v-model="searchText" @input="setSearchText()">
     </div>
     <div class="collection">
-      <a href="#" @click="selectCategory(null)" :class="{'active': !currentCategoryId}" class="collection-item">
+      <router-link :to="'/catalog'"
+                   :class="{'active': !currentCategoryId}"
+                   class="collection-item">
         All categories
-      </a>
-      <a href="#"
-         v-for="category in categories"
-         v-bind:key="category.id"
-         @click="selectCategory(category.id)"
-         :class="{'active': currentCategoryId === category.id}"
-         class="collection-item">
-        {{ category.title }}
-      </a>
+      </router-link>
+
+      <router-link  v-for="category in categories"
+                    v-bind:key="category.id"
+                    :to="{ name: 'catalog', params: { category_id: category.id }}"
+                    :class="{'active': currentCategoryId === category.id}"
+                    class="collection-item">
+          {{ category.title }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -29,7 +31,6 @@
     data() {
       return {
         categories: [],
-        currentCategoryId: null,
         searchText: '',
         filters: {}
       }
@@ -43,13 +44,15 @@
       })
     },
 
+    computed: {
+      currentCategoryId () {
+        this.setFilters({category: this.$route.params.category_id})
+        return this.$route.params.category_id
+      }
+    },
+
     methods: {
       ...mapMutations(['setFilters']),
-
-      selectCategory(categoryId) {
-        this.currentCategoryId = categoryId
-        this.setFilters({category: categoryId})
-      },
 
       setSearchText() {
         this.setFilters({searchText: this.searchText})

@@ -1,39 +1,44 @@
 <template>
-  <div class="container" v-if="dataProduct">
+  <div class="container product-card" v-if="dataProduct">
     <div class="row">
       <div class="col s12">
+        <back-button />
         <h3>{{ dataProduct.title }}</h3>
       </div>
       <div class="col s12">
-        <div class="col s3">
+        <div class="col s2">
           <img class="img-fluid" :src="dataProduct.thumbnailUrl"/>
         </div>
-        <div class="col s9">
-          <span> Price: ${{ dataProduct.price | priceFormatterFilter }}</span>
-          <span>
+        <div class="col s3 info">
+          <div class="price">
+            <span> Price: {{ dataProduct.price | priceFormatterFilter }} </span>
+          </div>
+          <div class="isbn">
+            <span> ISBN: {{ dataProduct.isbn }} </span>
+          </div>
+          <div class="available">
+            <span> In stock: {{ dataProduct.available }} pc. </span>
+          </div>
+          <div class="rating">
               Rating:
-              <small class="text-muted" v-for="rate in dataProduct.rating">
+              <small class="text-muted" v-for="(index, rate) in dataProduct.rating" :key="index">
                 ★
               </small>
-            </span>
-          <div>
-            <buy-button :product="dataProduct"/>
-          </div>
+            </div>
+            <div class="buy-btn-block">
+              <buy-button :product="dataProduct"/>
+            </div>
         </div>
-
-
-        <router-link :to="'/'">
-          <button type="button" class="btn btn-secondary">Back to catalog</button>
-        </router-link>
       </div>
 
-      <div class="col s12 text-lg-left">
-        <p class="text" v-if="dataProduct.longDescription">
+      <div v-if="dataProduct.longDescription" class="col s12 text-lg-left">
+        <h5>Description</h5>
+        <p class="text">
           {{ dataProduct.longDescription }}
         </p>
-        <p v-else>
+      </div>
+      <div v-else>
           No description
-        </p>
       </div>
     </div>
   </div>
@@ -48,6 +53,7 @@
   import store from '../store'
 
   import BuyButton from '../components/BuyButton'
+  import BackButton from '../components/BackButton'
 
   import capitalizeFilter from '../filters/capitalize.filter'
   import priceFormatterFilter from '../filters/price-formatter.filter'
@@ -62,7 +68,8 @@
     },
 
     components: {
-      BuyButton
+      BuyButton,
+      BackButton
     },
 
     filters: {

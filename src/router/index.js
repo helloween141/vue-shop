@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Catalog from '@/views/Catalog'
-import Product from '@/views/Product'
-import About from '@/views/About'
-import Cart from '@/views/Cart'
-import SuccessOrder from '@/views/SuccessOrder'
 
 Vue.use(Router)
 
@@ -13,28 +8,33 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: () => import('@/views/Home.vue')
+    },
+    {
+      path: '/catalog/:category_id?',
       name: 'catalog',
-      component: Catalog
+      component: () => import('@/views/Catalog.vue')
     },
     {
       path: '/product/:url',
       name: 'product',
-      component: Product
+      component: () => import('@/views/Product.vue')
     },
     {
       path: '/about',
       name: 'about',
-      component: About
+      component: () => import('@/views/About.vue')
     },
     {
       path: '/cart',
       name: 'cart',
-      component: Cart
+      component: () => import('@/views/Cart.vue')
     },
     {
       path: '/success-order/:orderId',
       name: 'success-order',
-      component: SuccessOrder
+      component: () => import('@/views/SuccessOrder.vue')
     },
   ]
 })

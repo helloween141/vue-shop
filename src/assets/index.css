@@ -1,4 +1,4 @@
-body {
+#app {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -8,8 +8,12 @@ main {
   flex: 1 0 auto;
 }
 
-nav .brand-logo {
-  padding-left: 30px  !important;
+.page-footer {
+  padding-top: 0 !important;
+}
+
+.page-footer .footer-copyright {
+  min-height: 64px !important;
 }
 
 .categories-block {
@@ -47,6 +51,30 @@ nav .brand-logo {
   font-weight: bold;
 }
 
+
+.product-card .price {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.product-card .isbn, .product-card .rating, .product-card .available {
+  margin-bottom: 8px;
+}
+
+.product-card .buy-btn-block {
+  position: relative;
+}
+
+.product-card a {
+  right: auto !important;
+  bottom: auto !important;
+}
+
 .helper-text {
   color: #f44336 !important;
+}
+
+.back-btn {
+  margin-top: 20px;
 }

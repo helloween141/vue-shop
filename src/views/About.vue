@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-left">
+      <div class="col s12 text-left">
+        <back-button />
         <h1 class="mt-4">About iShop</h1>
-        <hr/>
         <p>
           LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -34,8 +34,13 @@
 </template>
 
 <script>
+import BackButton from '../components/BackButton'
+
 export default {
-  name: 'About'
+  name: 'About',
+  components: {
+    BackButton
+  }
 }
 </script>
 

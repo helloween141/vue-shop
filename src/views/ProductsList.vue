@@ -5,10 +5,10 @@
       <div class="row">
         <div class="col s12">
           <select class="browser-default" v-model="sortType" @change="setSortType">
-            <option value="rating" selected>Popular</option>
+            <option value="popular" selected>Popular</option>
             <option value="price_desc">Expensive first</option>
             <option value="price_asc">Cheap first</option>
-            <option value="id">New</option>
+            <option value="id">Newest</option>
           </select>
         </div>
       </div>
@@ -89,7 +89,9 @@ export default {
 
   data () {
     return {
-      sortType: 'id',
+      products: [],
+      filters: [],
+      sortType: 'popular',
       loading: true
     }
   },
@@ -106,13 +108,15 @@ export default {
   },
 
   async mounted () {
-    await this.$store.dispatch('loadProducts')
+    this.products = await this.$store.dispatch('loadProducts')
+    this.setFilters({category: this.$route.params.category_id})
     this.loading = false
   },
 
   computed: {
     allProducts () {
-      this.initPagination(this.$store.getters.allProducts)
+      const result = this.applyFilters(this.products)
+      this.initPagination(result)
       return this.items
     }
   },
@@ -122,7 +126,43 @@ export default {
 
     setSortType () {
       this.setFilters({ sortType: this.sortType })
+    },
+
+    applyFilters(productsList) {
+      const filters = this.$store.getters.getFilters
+
+      // Фильтрация по категории
+      if (filters.category) {
+        productsList = productsList.filter(
+          product => product.categories ? (product.categories).includes(+filters.category) : null
+        )
+      }
+
+      // Фильтрация по тексту
+      if (filters.searchText) {
+        productsList = productsList.filter(
+          product => product.title.toLowerCase().includes(filters.searchText.toLowerCase())
+        )
+      }
+
+      // Сортировка
+      if (filters.sortType) {
+        switch (filters.sortType) {
+          case 'id': productsList = productsList.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
+            break
+          case 'rating': productsList = productsList.sort((a, b) => (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0))
+            break
+          case 'artist_name': productsList = productsList.sort((a, b) => (a.artist > b.artist) ? 1 : ((b.artist > a.artist) ? -1 : 0))
+            break
+          case 'price_asc': productsList = productsList.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
+            break
+          case 'price_desc': productsList = productsList.sort((a, b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0))
+            break
+        }
+      }
+      return productsList
     }
+
   }
 }
 

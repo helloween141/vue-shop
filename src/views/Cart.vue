@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
+      <back-button />
       <div class="col-lg-12 text-left">
         <h3 class="mt-4">Shopping Cart</h3>
         <div class="cart" v-if="cartAllProducts.length > 0">
@@ -18,12 +19,12 @@
             <tbody>
             <tr v-for="product in cartAllProducts" :key="product.id">
               <td>
-                <router-link :to="{ name: 'product', params: { productId: product.id }}">
+                <router-link :to="{ name: 'product', params: { url: product.isbn }}">
                   <img :src="product.thumbnailUrl" style="width: 90px"/>
                 </router-link>
               </td>
               <td>
-                <router-link :to="{ name: 'product', params: { productId: product.id }}">
+                <router-link :to="{ name: 'product', params: { url: product.isbn }}">
                   {{ product.title }}
                 </router-link>
               </td>
@@ -117,6 +118,7 @@
   import {mapGetters, mapMutations} from 'vuex'
   import priceFormatterFilter from '../filters/price-formatter.filter'
   import {email, required, minLength} from 'vuelidate/lib/validators'
+  import BackButton from '../components/BackButton'
 
   export default {
     name: 'Cart',
@@ -147,6 +149,10 @@
           email
         }
       }
+    },
+
+    components: {
+      BackButton
     },
 
     computed: {
