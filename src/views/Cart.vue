@@ -4,7 +4,7 @@
       <back-button />
       <div class="col-lg-12 text-left">
         <h3 class="mt-4">Shopping Cart</h3>
-        <div class="cart" v-if="cartAllProducts.length > 0">
+        <div class="cart" v-if="products.length > 0">
           <table class="responsive-table">
             <thead>
             <tr>
@@ -17,7 +17,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="product in cartAllProducts" :key="product.id">
+            <tr v-for="product in products" :key="product.id">
               <td>
                 <router-link :to="{ name: 'product', params: { url: product.isbn }}">
                   <img :src="product.thumbnailUrl" style="width: 90px"/>
@@ -33,11 +33,11 @@
               </td>
               <td>
                 <button class="btn btn-small  waves-effect waves-light" @click="decAmount(product)">-</button>
-                {{ product.amount }}
+                {{ calcProductAmount(product) }}
                 <button class="btn btn-small waves-effect waves-light" @click="incAmount(product)">+</button>
               </td>
               <td>
-                {{ (calcProductTotalPrice(product)) | priceFormatterFilter }}
+                {{ calcProductTotalPrice(product) | priceFormatterFilter }}
               </td>
               <td>
                   <span class="remove-ico" @click="deleteProduct(product)">
@@ -125,6 +125,7 @@
 
     data() {
       return {
+        products: [],
         isCheckout: false,
         form: {
           name: '',
@@ -156,7 +157,17 @@
     },
 
     computed: {
-      ...mapGetters(['cartAllProducts', 'cartTotalPrice'])
+      ...mapGetters(['cartProductAmount']),
+
+      cartTotalPrice() {
+        return this.products.length > 0 ? this.products.reduce((accumulator, currentValue) => accumulator + (currentValue.amount * currentValue.price || 0), 0) : 0
+      }
+          
+    },
+
+    async mounted() {
+      this.products = await this.$store.dispatch('cartAllProducts')
+      console.log(this.products)
     },
 
     methods: {
@@ -166,15 +177,23 @@
         return product.price * product.amount
       },
 
+      calcProductAmount(product) {
+        return this.cartProductAmount(product.id)
+      },
+
       incAmount(product) {
-        this.changeAmountProduct({productId: product.id, type: 'inc'})
+        product.amount++
+        this.changeAmountProduct({productId: product.id, amount: product.amount})
       },
 
       decAmount(product) {
-        this.changeAmountProduct({productId: product.id, type: 'dec'})
+        product.amount - 1 > 0 ? product.amount-- : 1 
+        this.changeAmountProduct({productId: product.id, amount: product.amount})
       },
 
       deleteProduct(product) {
+        const index = this.products.findIndex(item => item.id === product.id)
+        this.products.splice(index, 1);
         this.removeProduct(product)
       },
 
@@ -187,7 +206,7 @@
           this.isCheckout = false
 
           if (orderId) {
-            this.$router.push({name: 'success-order', params: {orderId}})
+            this.$router.push({name: 'success-order', params: { orderId }})
           }
         }
       }

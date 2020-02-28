@@ -17,30 +17,7 @@
     <div class="row" v-if="allProducts">
 
       <div class="col s12 m6 l4" v-for="product in allProducts" :key="product.id">
-        <div class="card">
-          <div class="card-image">
-            <router-link :to="{ name: 'product', params: { productId: product.id, url: product.isbn }}">
-              <img class="activator" :src="product.thumbnailUrl">
-            </router-link>
-          </div>
-          <div class="card-content">
-            <router-link class="card-title" :to="{ name: 'product', params: { url: product.isbn }}">
-               {{ product.title }}
-            </router-link>
-            <div>
-              <b>{{ product.price | priceFormatterFilter }}</b>
-            </div>
-            <div>
-              <small> In stock: {{ product.available }} pc. </small>
-            </div>
-            <div>
-              <small v-for="(index, rate) in product.rating" :key="index" class="red-text">
-                ★
-              </small>
-            </div>
-          </div>
-          <buy-button :product="product" />
-        </div>
+        <ProductCard :product="product" />
       </div>
 
       <div class="col s12" v-if="pageCount > 1">
@@ -73,18 +50,15 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import BuyButton from '../components/BuyButton'
+import ProductCard from '../components/ProductCard'
 
 import paginationMixin from '../mixins/pagination.mixin'
-
-import capitalizeFilter from '../filters/capitalize.filter'
-import priceFormatterFilter from '../filters/price-formatter.filter'
 
 export default {
   name: 'ProductsList',
 
   components: {
-    BuyButton
+    ProductCard
   },
 
   data () {
@@ -97,11 +71,6 @@ export default {
   },
 
   mixins: [paginationMixin],
-
-  filters: {
-    capitalizeFilter,
-    priceFormatterFilter
-  },
 
   props: {
     parameters: Object

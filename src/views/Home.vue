@@ -17,9 +17,22 @@
 
     <div class="container">
       <div class="section">
-        <!--   Icon Section   -->
-        <div class="row">
 
+        <div v-if="!loading">
+          <div class="row" v-if="newProducts">
+            <h4 class="center">New books</h4>
+            <div class="col s12 m6 l4" v-for="product in newProducts" :key="product.id">
+              <ProductCard :product="product"/>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div class="progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col s12 m4">
             <div class="icon-block">
               <h2 class="center"><i class="material-icons">flash_on</i></h2>
@@ -55,16 +68,21 @@
 </template>
 
 <script>
+  import ProductCard from '../components/ProductCard'
   export default {
     name: 'Home',
     data() {
       return {
-        popularProducts: []
+        newProducts: [],
+        loading: true
       }
     },
+    components: {
+      ProductCard
+    },    
     async mounted() {
-      this.popularProducts = await this.$store.dispatch('loadPopular', 8)
-
+      this.newProducts = await this.$store.dispatch('loadNew', 6)
+      this.loading = false
     },
   }
 </script>

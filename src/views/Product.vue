@@ -6,7 +6,7 @@
         <h3>{{ dataProduct.title }}</h3>
       </div>
       <div class="col s12">
-        <div class="col s2">
+        <div class="col s3">
           <img class="img-fluid" :src="dataProduct.thumbnailUrl"/>
         </div>
         <div class="col s3 info">

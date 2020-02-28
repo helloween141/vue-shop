@@ -21,10 +21,19 @@ export default {
   actions: {
     async loadProducts (ctx) {
       try {
-        return (await firebase.database().ref('products').once('value')).val()
+          return (await firebase.database().ref('products').once('value')).val() || {}
       } catch (error) {
-		       console.log(error)
+		      console.log(error)
 		  }
+    },
+
+    async loadProductById (ctx, productId) {
+      try {
+          const product = (await firebase.database().ref('products').orderByChild('id').equalTo(productId).once('child_added')).val() || {}
+          return {...product}
+      } catch (error) {
+          console.log(error)
+      }
     },
 
     async loadProductByUrl (ctx, productUrl) {
@@ -36,20 +45,12 @@ export default {
       }
     },
 
-    async loadPopular (ctx, limit) {
+    async loadNew (ctx, limit) {
       try {
-        let list = []
-        await firebase.database().ref('products').orderByChild('rating').limitToLast(limit).once('value', snapshot => {
-          snapshot.forEach(product => {
-            list.push(product.val())
-          })
-        })
-
-        return list
+        return (await firebase.database().ref('products').orderByChild('id').limitToLast(limit).once('value')).val() || {}
       } catch (error) {
         console.log(error)
       }
-    },
-
+    }
   }
 }
