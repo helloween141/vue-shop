@@ -34,17 +34,16 @@
 </template>
 
 <script>
-import BackButton from '../components/BackButton'
+import BackButton from "../components/BackButton";
 
 export default {
-  name: 'About',
+  name: "About",
   components: {
     BackButton
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

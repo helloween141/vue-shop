@@ -1,4 +1,3 @@
-const axios = require('axios')
 const firebase = require('firebase')
 
 export default {
@@ -21,7 +20,7 @@ export default {
   actions: {
     async loadProducts (ctx) {
       try {
-          return (await firebase.database().ref('products').once('value')).val() || {}
+        return (await firebase.database().ref('products').once('value')).val() || {}
       } catch (error) {
 		      console.log(error)
 		  }
@@ -29,10 +28,10 @@ export default {
 
     async loadProductById (ctx, productId) {
       try {
-          const product = (await firebase.database().ref('products').orderByChild('id').equalTo(productId).once('child_added')).val() || {}
-          return {...product}
+        const product = (await firebase.database().ref('products').orderByChild('id').equalTo(productId).once('child_added')).val() || {}
+        return {...product}
       } catch (error) {
-          console.log(error)
+        console.log(error)
       }
     },
 
