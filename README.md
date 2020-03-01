@@ -1,6 +1,7 @@
 # i-shop
 
 > A Vue.js project
+> Production: https://simple-shop-vue.firebaseapp.com/
 
 ## Build Setup
 
